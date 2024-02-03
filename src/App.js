@@ -26,7 +26,7 @@ function App() {
   
         // Fetch forecast data
         const forecastData = await getForecastData(city, units);
-        setForecast(forecastData.slice(0, 5));
+        setForecast(forecastData);
       } catch (error) {
         console.error('Error fetching weather data:', error);
         // Optionally, you can set a default or empty weather state here

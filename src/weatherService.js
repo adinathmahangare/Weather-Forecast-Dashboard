@@ -35,8 +35,17 @@ const getForecastData = async (city, units = 'metric') => {
 
     const data = await fetch(URL).then((res) => res.json());
 
+    // Group forecast data by date
+    const groupedData = {};
+    data.list.forEach((item) => {
+        const date = item.dt_txt.split(' ')[0];
+        if (!groupedData[date]) {
+            groupedData[date] = item;
+        }
+    });
+
     // Extract forecast data for the next five days
-    const forecastData = data.list.slice(0, 5).map((item) => {
+    const forecastData = Object.values(groupedData).map((item) => {
         const { dt_txt, main: { temp }, weather } = item;
         const { description, icon } = weather[0];
         return {
@@ -45,9 +54,10 @@ const getForecastData = async (city, units = 'metric') => {
             description,
             iconURL: makeIconURL(icon)
         };
-    });
+    }).slice(0, 5);
 
     return forecastData;
 };
+
 
 export { getFormattedWetherData, getForecastData };
