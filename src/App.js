@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getFormattedWetherData, getForecastData } from './weatherService';
 import Descriptions from "./components/descriptions";
+import { FaSearch } from 'react-icons/fa';
 
 function App() {
   const [city, setCity] = useState("Paris");
@@ -15,23 +16,23 @@ function App() {
         const weatherData = await getFormattedWetherData(city, units);
         setWeather(weatherData);
   
-        // Set background gradient based on temperature
-        const threshold = units === "metric" ? 20 : 68; // Adjust threshold as needed
+      
+        const threshold = units === "metric" ? 20 : 68; 
         const temperature = weatherData.temp;
         if (temperature <= threshold) {
-          setBg('linear-gradient(to bottom, #87CEEB, #1E90FF)'); // Blue gradient for cold cities
+          setBg('linear-gradient(to bottom, #87CEEB, #1E90FF)'); // 
         } else {
-          setBg('linear-gradient(to bottom, #FFA07A, #FF6347)'); // Red gradient for hot cities
+          setBg('linear-gradient(to bottom, #FFA07A, #FF6347)'); // 
         }
   
-        // Fetch forecast data
+      
         const forecastData = await getForecastData(city, units);
         setForecast(forecastData);
       } catch (error) {
         console.error('Error fetching weather data:', error);
-        // Optionally, you can set a default or empty weather state here
+        
         setWeather(null);
-        // Optionally, you can handle the error or notify the user
+        
       }
     };
   
@@ -67,6 +68,14 @@ function App() {
                 name="city"
                 placeholder="Enter City..."
               />
+              <button onClick={() => {
+                const cityInput = document.querySelector('input[name="city"]');
+                if (cityInput.value.trim() !== "") {
+                  setCity(cityInput.value);
+                }
+              }}>
+                <FaSearch /> 
+              </button>
               <button onClick={(e) => handleUnitsClick(e)}>°F</button>
             </div>
 

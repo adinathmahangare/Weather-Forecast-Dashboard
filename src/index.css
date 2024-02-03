@@ -1,6 +1,6 @@
 :root {
-  --hot-gradient: linear-gradient(to bottom, #FFA500, #FF6347, #FF0000); /* Define gradient for hot cities */
-  --cold-gradient: linear-gradient(to bottom, #87CEEB, #4682B4, #4169E1); /* Define gradient for cold cities */
+  --hot-gradient: linear-gradient(to bottom, #FFA500, #FF6347, #FF0000); 
+  --cold-gradient: linear-gradient(to bottom, #87CEEB, #4682B4, #4169E1); 
   --section-overlay: rgba(0, 0, 0, 0.7);
   --background-overlay: rgba(0, 0, 0, 0.2);
 }
@@ -15,7 +15,7 @@
 .app {
   width: 100%;
   min-height: 100vh;
-  background: var(--hot-gradient); /* Apply the gradient background */
+  background: var(--hot-gradient); 
   background-position: center;
   background-size: cover;
 }
@@ -52,6 +52,7 @@
   align-items: center;
   margin-bottom: 15px;
   justify-content: space-between;
+  gap: 10px;
   background-color: var(--section-overlay);
 }
 
@@ -64,6 +65,7 @@
 
 .section__inputs>input {
   border: 0.8px solid white;
+  width:100%;
   border-radius: 0.4rem;
   background-color: transparent;
   color: white;
@@ -112,7 +114,7 @@
   padding: 1.5rem;
   border-radius: 0.4rem;
   margin-top: 1rem;
-  margin-bottom: 20px; /* Add space after the forecast section */
+  margin-bottom: 20px; 
 }
 
 .section__forecast h3 {
@@ -159,27 +161,35 @@
     min-height: 100vh;
   }
 
+  .section__inputs input {
+    width: 90%; 
+  }
+
+  .section__inputs button {
+    width: 20%;
+  }
+
   .section__forecast ul {
     display: flex;
-    flex-direction: column; /* Change flex direction to column for smartphone view */
+    flex-direction: column;
   }
 
   .section__forecast li {
-    margin-right: 0; /* Remove right margin for smartphone view */
+    margin-right: 0; 
     margin-bottom: 1rem;
   }
 
   .section__forecast li h5 {
-    font-size: 28px; /* Increase font size for date in smartphone view */
+    font-size: 28px; 
   }
 
   .section__forecast li img {
-    width: 80px; /* Increase width of the icon in smartphone view */
-    height: 80px; /* Increase height of the icon in smartphone view */
+    width: 80px; 
+    height: 80px;
   }
 
   .section__forecast li h3 {
-    font-size: 32px; /* Increase font size for temperature in smartphone view */
+    font-size: 32px; 
   }
 
 }
