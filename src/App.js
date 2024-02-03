@@ -1,28 +1,42 @@
-import hotBg from './assets/hot.jpg';
-import coldBg from './assets/cold.jpg';
-import Descriptions from './components/descriptions';
 import { useEffect, useState } from 'react';
-import { getFormattedWetherData } from './weatherService';
+import { getFormattedWetherData, getForecastData } from './weatherService';
+import Descriptions from "./components/descriptions";
 
 function App() {
   const [city, setCity] = useState("Paris");
   const [weather, setWeather] = useState(null);
   const [units, setUnits] = useState('metric');
-  const [bg, setBg] = useState(hotBg);
+  const [bg, setBg] = useState('');
+  const [forecast, setForecast] = useState(null);
 
-  useEffect(()=>{
-    const fetchWeatherData = async() =>{
-    const data = await getFormattedWetherData(city, units);
-    setWeather(data);
-
-    // dynamic bg
-    const threshold = units === "metric" ? 20 : 60;
-    if (data.temp <= threshold) setBg(coldBg);
-    else setBg(hotBg);
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const weatherData = await getFormattedWetherData(city, units);
+        setWeather(weatherData);
+  
+        // Set background gradient based on temperature
+        const threshold = units === "metric" ? 20 : 68; // Adjust threshold as needed
+        const temperature = weatherData.temp;
+        if (temperature <= threshold) {
+          setBg('linear-gradient(to bottom, #87CEEB, #1E90FF)'); // Blue gradient for cold cities
+        } else {
+          setBg('linear-gradient(to bottom, #FFA07A, #FF6347)'); // Red gradient for hot cities
+        }
+  
+        // Fetch forecast data
+        const forecastData = await getForecastData(city, units);
+        setForecast(forecastData.slice(0, 5));
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+        // Optionally, you can set a default or empty weather state here
+        setWeather(null);
+        // Optionally, you can handle the error or notify the user
+      }
     };
-
+  
     fetchWeatherData();
-  },[units, city]);
+  }, [units, city]);
 
   const handleUnitsClick = (e) => {
     const button = e.currentTarget;
@@ -41,10 +55,10 @@ function App() {
   };
 
   return (
-    <div className="app" style={{backgroundImage: `url(${bg})`}}>
+    <div className="app" style={{background: bg}}>
 
       <div className="overlay">
-      {weather && (
+        {weather && (
           <div className="container">
             <div className="section section__inputs">
               <input
@@ -69,8 +83,23 @@ function App() {
               </div>
             </div>
 
-            {/* bottom description */}
+            {/* Bottom description */}
             <Descriptions weather={weather} units={units} />
+
+            {/* 5-Day Forecast */}
+            <div className="section section__forecast">
+              <h2>5-Day Forecast</h2>
+              <ul>
+                {forecast && forecast.map((forecastItem, index) => (
+                  <li key={index}>
+                    <h5>{forecastItem.date}</h5> 
+                    <img src={forecastItem.iconURL} alt="weatherIcon" />
+                    <h3>{forecastItem.temp.toFixed()}&deg;{units === "metric" ? "C" : "F"}</h3>
+                    <p>{forecastItem.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </div>  

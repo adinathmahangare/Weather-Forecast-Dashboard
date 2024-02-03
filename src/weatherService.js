@@ -30,4 +30,24 @@ const getFormattedWetherData = async (city, units = 'metric') => {
     };
 };
 
-export {getFormattedWetherData};
+const getForecastData = async (city, units = 'metric') => {
+    const URL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${units}`;
+
+    const data = await fetch(URL).then((res) => res.json());
+
+    // Extract forecast data for the next five days
+    const forecastData = data.list.slice(0, 5).map((item) => {
+        const { dt_txt, main: { temp }, weather } = item;
+        const { description, icon } = weather[0];
+        return {
+            date: dt_txt.split(' ')[0],
+            temp,
+            description,
+            iconURL: makeIconURL(icon)
+        };
+    });
+
+    return forecastData;
+};
+
+export { getFormattedWetherData, getForecastData };

@@ -63,7 +63,6 @@ const descriptions = ({weather, units}) => {
                 <div 
                 className='description_card-icon'>
                     {icon}
-                    
                     <small>{title}</small>
                 </div>
                 <h2>{`${data} ${unit}`}</h2>

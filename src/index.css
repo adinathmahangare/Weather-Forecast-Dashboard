@@ -1,6 +1,8 @@
 :root {
+  --hot-gradient: linear-gradient(to bottom, #FFA500, #FF6347, #FF0000); /* Define gradient for hot cities */
+  --cold-gradient: linear-gradient(to bottom, #87CEEB, #4682B4, #4169E1); /* Define gradient for cold cities */
   --section-overlay: rgba(0, 0, 0, 0.7);
-  --background-overlay: rgba(0, 0, 0, 0.2)
+  --background-overlay: rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -12,14 +14,15 @@
 
 .app {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  background: var(--hot-gradient); /* Apply the gradient background */
   background-position: center;
   background-size: cover;
 }
 
 .overlay {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--background-overlay);
 }
 
@@ -44,7 +47,15 @@
   color: white;
 }
 
-.section__inputs, .section__temperature {
+.section__inputs{
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: space-between;
+  background-color: var(--section-overlay);
+}
+
+.section__temperature {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -94,4 +105,81 @@
 
 .temperature>h1 {
   font-size: 60px;
+}
+
+.section__forecast {
+  background-color: var(--section-overlay);
+  padding: 1.5rem;
+  border-radius: 0.4rem;
+  margin-top: 1rem;
+  margin-bottom: 20px; /* Add space after the forecast section */
+}
+
+.section__forecast h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.section__forecast ul {
+  list-style: none;
+  padding: 1rem 0rem 0rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.section__forecast li {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.4rem;
+  padding: 1rem;
+  flex: 1;
+  margin-right: 0.5rem;
+  text-align: center;
+}
+
+.section__forecast li:last-child {
+  margin-right: 0;
+}
+
+.section__forecast li strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.section__forecast li span {
+  font-size: 20px;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .app {
+    height: auto; 
+    min-height: 100vh;
+  }
+
+  .section__forecast ul {
+    display: flex;
+    flex-direction: column; /* Change flex direction to column for smartphone view */
+  }
+
+  .section__forecast li {
+    margin-right: 0; /* Remove right margin for smartphone view */
+    margin-bottom: 1rem;
+  }
+
+  .section__forecast li h5 {
+    font-size: 28px; /* Increase font size for date in smartphone view */
+  }
+
+  .section__forecast li img {
+    width: 80px; /* Increase width of the icon in smartphone view */
+    height: 80px; /* Increase height of the icon in smartphone view */
+  }
+
+  .section__forecast li h3 {
+    font-size: 32px; /* Increase font size for temperature in smartphone view */
+  }
+
 }
