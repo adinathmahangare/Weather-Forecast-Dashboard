@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { getFormattedWetherData, getForecastData } from './weatherService';
 import Descriptions from "./components/descriptions";
 import { FaSearch } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [city, setCity] = useState("Paris");
@@ -16,27 +18,34 @@ function App() {
         const weatherData = await getFormattedWetherData(city, units);
         setWeather(weatherData);
   
-      
         const threshold = units === "metric" ? 20 : 68; 
         const temperature = weatherData.temp;
         if (temperature <= threshold) {
-          setBg('linear-gradient(to bottom, #87CEEB, #1E90FF)'); // 
+          setBg('linear-gradient(to bottom, #87CEEB, #1E90FF)');
         } else {
-          setBg('linear-gradient(to bottom, #FFA07A, #FF6347)'); // 
+          setBg('linear-gradient(to bottom, #FFA07A, #FF6347)');
         }
   
-      
         const forecastData = await getForecastData(city, units);
         setForecast(forecastData);
+        toast.dismiss(); // Dismiss any previous toast messages
       } catch (error) {
         console.error('Error fetching weather data:', error);
-        
         setWeather(null);
-        
+        setForecast(null);
+        toast.error('City not found. Please enter a valid city name.', {
+          autoClose: 5000
+        });
       }
     };
   
-    fetchWeatherData();
+    if (city.trim() !== "") {
+      fetchWeatherData();
+    } else {
+      toast.warn('Please enter a city name.', {
+        autoClose: 3000
+      });
+    }
   }, [units, city]);
 
   const handleUnitsClick = (e) => {
@@ -48,15 +57,28 @@ function App() {
     setUnits(isCelsius ? "metric" : "imperial");
   }
 
+  const handleSearch = () => {
+    const cityInput = document.querySelector('input[name="city"]');
+    const enteredCity = cityInput.value.trim();
+    if (enteredCity !== "") {
+      setCity(enteredCity);
+    } else {
+      toast.warn('Please enter a city name.', {
+        autoClose: 3000
+      });
+    }
+  }
+
   const enterKeyPressed = (e) => {
     if (e.keyCode === 13) {
-      setCity(e.currentTarget.value);
+      handleSearch();
       e.currentTarget.blur();
     }
   };
 
   return (
     <div className="app" style={{background: bg}}>
+      <ToastContainer />
 
       <div className="overlay">
         {weather && (
@@ -68,12 +90,7 @@ function App() {
                 name="city"
                 placeholder="Enter City..."
               />
-              <button onClick={() => {
-                const cityInput = document.querySelector('input[name="city"]');
-                if (cityInput.value.trim() !== "") {
-                  setCity(cityInput.value);
-                }
-              }}>
+              <button onClick={handleSearch}>
                 <FaSearch /> 
               </button>
               <button onClick={(e) => handleUnitsClick(e)}>°F</button>
@@ -92,10 +109,8 @@ function App() {
               </div>
             </div>
 
-            {/* Bottom description */}
             <Descriptions weather={weather} units={units} />
 
-            {/* 5-Day Forecast */}
             <div className="section section__forecast">
               <h2>5-Day Forecast</h2>
               <ul>
