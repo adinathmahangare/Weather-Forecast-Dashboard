@@ -1,7 +1,8 @@
 ## About The Project
 
 # Weather Forecast Dashboard
-[![Screenshot](Weather-Forecast-Dashboard/Screenshot 2024-02-04 110047.png)]([https://adinathmahangare.github.io/Weather-Forecast-Dashboard/])
+[![Screenshot](https://github.com/adinathmahangare/Weather-Forecast-Dashboard/blob/master/screenshot.jpeg)](https://adinathmahangare.github.io/Weather-Forecast-Dashboard/)
+
 
 
 There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
