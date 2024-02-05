@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { getFormattedWetherData, getForecastData } from './weatherService';
 import Descriptions from "./components/descriptions";
-import { FaSearch } from 'react-icons/fa';
+import ForecastData from './components/ForecastData';
+import Input from './components/Input';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Temperature from './components/Temperature';
 
 function App() {
   const [city, setCity] = useState("Paris");
@@ -79,51 +81,13 @@ function App() {
   return (
     <div className="app" style={{background: bg}}>
       <ToastContainer />
-
       <div className="overlay">
         {weather && (
           <div className="container">
-            <div className="section section__inputs">
-              <input
-                onKeyDown={enterKeyPressed}
-                type="text"
-                name="city"
-                placeholder="Enter City..."
-              />
-              <button onClick={handleSearch}>
-                <FaSearch /> 
-              </button>
-              <button onClick={(e) => handleUnitsClick(e)}>°F</button>
-            </div>
-
-            <div className="section section__temperature">
-              <div className="icon">
-                <h3>{`${weather.name}, ${weather.country}`}</h3>
-                <img src={weather.iconURL} alt="weatherIcon" />
-                <h3>{weather.description}</h3>
-              </div>
-              <div className="temperature">
-                <h1>{`${weather.temp.toFixed()} °${
-                  units === "metric" ? "C" : "F"
-                }`}</h1>
-              </div>
-            </div>
-
+            <Input handleSearch = {handleSearch} handleUnitsClick={handleUnitsClick} enterKeyPressed={enterKeyPressed}/>
+            <Temperature units = {units} weather = {weather} />
             <Descriptions weather={weather} units={units} />
-
-            <div className="section section__forecast">
-              <h2>5-Day Forecast</h2>
-              <ul>
-                {forecast && forecast.map((forecastItem, index) => (
-                  <li key={index}>
-                    <h5>{forecastItem.date}</h5> 
-                    <img src={forecastItem.iconURL} alt="weatherIcon" />
-                    <h3>{forecastItem.temp.toFixed()}&deg;{units === "metric" ? "C" : "F"}</h3>
-                    <p>{forecastItem.description}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ForecastData forecast={forecast} units={units} />
           </div>
         )}
       </div>  
